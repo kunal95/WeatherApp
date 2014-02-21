@@ -1,0 +1,192 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="content-language" content="en" />
+
+
+   <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+    <!--  zWeatherFeed plugin scripts (required)
+    <script src="jquery-1.9.1.js"></script>
+    <link href="jquery.mobile-1.3.2.min.css" rel="stylesheet" />
+    <script src="jquery.mobile-1.3.2.min.js"></script> -->
+    <link href="StyleSheet.css" rel="stylesheet" />
+    <script src="jquery.zweatherfeed.min.js" type="text/javascript"></script>
+
+    <title>WeatherFeed</title>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            //onload
+            $("#weatherList").click(function () {
+                $("#weatherList").hide(0);
+            });
+            //Location GPS
+            var x = document.getElementById("demo");
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(showPosition);
+                }
+                else { x.innerHTML = "Geolocation is not supported by this browser."; }
+            }
+            function showPosition(position) {
+                x.innerHTML = "Latitude: " + position.coords.latitude +
+                "<br>Longitude: " + position.coords.longitude;
+            }
+            //Yahoo! Weather
+            $('#search').click(function (e) {
+               e.preventDefault();
+               weatherGeocode('weatherLocation', 'weatherList');
+               $(".weatherItem").hide(0);
+               $("#weatherList").show(0);
+            });
+            $('#weatherLocation').change(function (e) {
+                e.preventDefault();
+                weatherGeocode('weatherLocation', 'weatherList');
+                $(".weatherItem").hide(0);
+                $("#weatherList").show(0);
+            });
+                
+            function showLocation(address, woeid) {
+
+                $('#weatherReport').empty();
+
+                $('#weatherReport').weatherfeed([woeid], {
+                    woeid: true,
+                });
+            }
+
+            function weatherGeocode(search, output) {
+
+                var status;
+                var results;
+                var html = '';
+                var msg = '';
+
+                // Set document elements
+                var search = document.getElementById(search).value;
+                var output = document.getElementById(output);
+                if (search) {
+
+                    output.innerHTML = '';
+
+                    // Cache results for an hour to prevent overuse
+                    now = new Date();
+
+                    // Create Yahoo Weather feed API address
+                    var query = 'select * from geo.places where text="' + search + '"';
+                    var api = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(query) + '&rnd=' + now.getFullYear() + now.getMonth() + now.getDay() + now.getHours() + '&format=json&callback=?';
+
+                    // Send request
+                    $.ajax({
+                        type: 'GET',
+                        url: api,
+                        dataType: 'json',
+                        success: function (data) {
+
+                            if (data.query.count > 0) {
+
+                                html = '<span>' + data.query.count + ' location';
+
+                                if (data.query.count > 1) html = html + 's';
+                                html = html + ' found:</span><ul id="list">';
+
+                                // List multiple returns
+                                if (data.query.count > 1) {
+                                    for (var i = 0; i < data.query.count; i++) {
+                                        html = html + '<li class="element">' + _getWeatherAddress(data.query.results.place[i]) + '</li>';
+                                    }
+                                } else {
+                                    html = html + '<li class="element">' + _getWeatherAddress(data.query.results.place) + '</li>';
+                                }
+
+                                html = html + '</ul>';
+
+                                output.innerHTML = html;
+
+                                // Bind callback links
+                                $("a.weatherAddress").unbind('click');
+                                $("a.weatherAddress").click(function (e) {
+                                    e.preventDefault();
+
+                                    var address = $(this).text();
+                                    var weoid = $(this).attr('rel');
+
+                                    showLocation(address, weoid);
+                                });
+
+                            } else {
+                                output.innerHTML = 'The location could not be found';
+                            }
+                        },
+                        error: function (data) {
+                            output.innerHTML = 'An error has occurred';
+                        }
+                    });
+
+                } else {
+
+                    // No search given
+                    output.innerHTML = 'Please enter a location or partial address';
+                }
+            }
+
+            function _getWeatherAddress(data) {
+
+                // Get address
+                var address = data.name;
+                if (data.admin2) address += ', ' + data.admin2.content;
+                if (data.admin1) address += ', ' + data.admin1.content;
+                address += ', ' + data.country.content;
+
+                // Get WEOID
+                var woeid = data.woeid;
+
+                return '<a class="weatherAddress" data-role="button" href="#" rel="' + woeid + '" title="Click for to see a weather report">' + address + '</a>';
+            }
+        });
+    </script>
+</head>
+<body>
+    <div data-role="page" id="page1">
+        <div data-role="header">
+            <a id="optnBtn" href="#defaultpanel" data-role="button" data-inline="true" data-icon="bars">&nbsp;</a>
+            <h1>By Location</h1>
+        </div>
+        <div data-role="content">
+
+            <form>
+                <input type="search" placeholder="Enter a city...." id="weatherLocation" name="weatherLocation" size="50" />
+                <input id="search" type="submit" name="submit" value="Search" data-role="button" style="width:0px!important" />
+            </form>
+            <div id="weatherList">
+            </div>
+            <div id="weatherReport" style="text-align:center;margin-top:10px">
+                
+                </div>
+            <div id="demo"></div>
+        </div>
+        <div data-role="panel" id="defaultpanel" data-theme="c">
+            <div class="panel-content">
+                <div data-role="content">
+                    <br /><br /><br />
+                    <br />
+                    <br />
+                    <ul data-role="listview" data-theme="b" id="panelList">
+                        <li>By Location</li>
+                        <li><a href="forecast.html" rel="external">Forecast</a></li>
+                        <li><a href="Map.html" rel="external">Map</a></li>
+                             
+                        <li><a href="index.html" rel="external">My Home</a></li>
+                    </ul>
+                </div>
+                <a href="#demo-links" data-rel="close" data-role="button" data-theme="b" data-icon="delete" data-inline="true">&nbsp;</a>
+            </div><!-- /content wrapper for padding -->
+        </div><!-- /defaultpanel -->
+    </div>
+
+
+</body>
+</html>
