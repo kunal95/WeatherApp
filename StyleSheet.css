@@ -1,7 +1,9 @@
 ﻿.ui-panel-animate.ui-panel:not(.ui-panel-display-reveal), .ui-panel-animate.ui-panel:not(.ui-panel-display-reveal)>div, .ui-panel-animate.ui-panel-closed.ui-panel-display-reveal>div, .ui-panel-animate.ui-panel-content-wrap, .ui-panel-animate.ui-panel-content-fixed-toolbar{background-image:url('final.PNG')}
-.ui-panel-position-left.ui-panel-display-reveal, .ui-panel-position-left.ui-panel-open {
-background-image:url('Beautiful-Sunset-Wallpapers.jpg');background-position-x:center;background-position-y:bottom;
-}
+ .ui-panel-position-left.ui-panel-display-reveal, .ui-panel-position-left.ui-panel-open {
+            background-image: url('Beautiful-Sunset-Wallpapers.jpg');
+            background-position-x: center;
+            background-position-y:-200px;
+        }
 .ui-panel-inner {
             padding: 0px;
             padding-right:1px;
