@@ -1,0 +1,39 @@
+﻿.ui-panel-animate.ui-panel:not(.ui-panel-display-reveal), .ui-panel-animate.ui-panel:not(.ui-panel-display-reveal)>div, .ui-panel-animate.ui-panel-closed.ui-panel-display-reveal>div, .ui-panel-animate.ui-panel-content-wrap, .ui-panel-animate.ui-panel-content-fixed-toolbar{background-image:url('final.PNG')}
+.ui-panel-position-left.ui-panel-display-reveal, .ui-panel-position-left.ui-panel-open {
+background-image:url('Beautiful-Sunset-Wallpapers.jpg');background-position-x:center;background-position-y:bottom;
+}
+.ui-panel-inner {
+            padding: 0px;
+            padding-right:1px;
+        }
+ #search {
+        }
+#weatherLocation{
+font-family:Gisha;
+text-shadow:0px 0px 1px #000000;
+font-size:20px;
+}
+a {text-decoration:none;}
+.weatherAddress {
+    font-size:12px;
+color:white;
+border:1px solid cadetblue;
+background-color:cadetblue;
+border-radius:10px 10px;
+box-shadow:black 0px 0px 10px;
+}
+.weatherItem{text-align:right;color:ghostwhite;position:relative}
+.weatherCity{position:relative; font-size:40px;}
+.weatherTemp{font-size:80px;}
+.weatherDesc{font-size:40px;}
+.weatherWind,.weatherRange{font-size:30px;}
+ul,li {list-style-type: none;margin:0px;padding:0px;}
+#weatherList ul { list-style-type:none; margin:0; padding:0; }
+#weatherList li { display:inline; float:left; padding:0 5px; margin:0; }
+.weatherImg {position:relative;top:-195px;float:left;opacity:1;left:-10px;}
+.ui-btn-left, .ui-btn-right, .ui-btn-inline,#panelList {opacity:0.8;}
+.weatherForecast{margin-top:200px;position:relative;top:-350px}
+.weatherForecastItem {
+    margin-bottom: 20px;
+    border-bottom: white 2px solid;
+}
