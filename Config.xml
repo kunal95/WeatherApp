@@ -15,5 +15,6 @@
     <author href="https://build.phonegap.com" email="support@phonegap.com">
        Kunal Sachdeva
     </author>
-
+    <icon src="icon.png" />
+    <gap:splash src="splash.png" />
 </widget>
